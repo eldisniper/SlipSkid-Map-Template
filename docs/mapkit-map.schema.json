@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "mapkit-map.schema.json",
+  "title": "Slip & Skid Map Kit map",
+  "description": "A map described in JSON (docs/JSON_MAPS.md). Built by JsonMapGenerator: python tools/build_map.py <map.json>. Keep in step with JsonMapGenerator.cs.",
+  "type": "object",
+  "required": ["map", "course"],
+  "additionalProperties": false,
+  "patternProperties": { "^\\$": {} },
+  "properties": {
+    "map": {
+      "type": "object",
+      "required": ["id"],
+      "additionalProperties": false,
+      "patternProperties": { "^\\$": {} },
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9]+$", "description": "Folder, bundle and package name: letters and digits only. Unique across maps." },
+        "name": { "type": "string", "description": "Name shown in the level select (default: the id with spaces). Must be unique: lobbies match levels by name." },
+        "author": { "type": "string" },
+        "difficulty": { "type": "integer", "minimum": 1, "maximum": 5, "default": 3 },
+        "host": { "type": "string", "description": "Stock level the map runs on (its lighting, camera, scenery): Snake, Bridge, Dermz city… Default: Snake." },
+        "deathDepth": { "type": "number", "default": 30, "description": "How far below the lowest road the sea (and the death plane 3.5 m under it) lies." },
+        "seasons": { "type": "boolean", "default": false, "description": "Each player's sky, scenery and weather follow the season under their car (set \"season\" steps)." },
+        "reversible": { "type": "boolean", "default": false }
+      }
+    },
+    "podium": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": { "^\\$": {} },
+      "properties": {
+        "position": { "$ref": "#/definitions/vec3", "default": [0, 0, -80] },
+        "yaw": { "type": "number", "default": 180 }
+      }
+    },
+    "decor": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": { "^\\$": {} },
+      "properties": {
+        "theme": { "enum": ["NightCity", "DrownedCity", "Seasons", "None"], "default": "None" },
+        "tunnelArt": { "enum": ["Neon", "Seasons", "None"], "description": "Decorated tunnels. Default: Seasons with the Seasons theme, else None." },
+        "finishBarrier": { "type": "boolean", "default": true, "description": "City themes: a barrier after the finish." }
+      }
+    },
+    "course": { "$ref": "#/definitions/steps", "description": "The road from the start, in order. The last step is { \"finish\": true }." }
+  },
+  "definitions": {
+    "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+    "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/step" } },
+    "pipe": { "enum": ["None", "Left", "Right", "Both", "Outer"], "description": "Quarter-pipe wall(s): Outer = outside of the turn, Both = a half-pipe." },
+    "pieceOptions": {
+      "width": { "type": "number", "default": 8, "description": "Asphalt width in m (8 like the game's road, 16 for landings)." },
+      "length": { "type": "number", "default": 10, "description": "Length of each piece in m." },
+      "bank": { "type": "number", "default": 0, "description": "Degrees the road leans into the turn." },
+      "pipe": { "$ref": "#/definitions/pipe" },
+      "pipeHeight": { "type": "number", "default": 3, "maximum": 5 },
+      "pillars": { "type": "boolean", "default": false, "description": "Pillars down to the sea (decoration)." },
+      "push": { "type": "boolean", "default": false, "description": "Accelerators (before a loop)." },
+      "tunnel": { "type": "boolean", "default": false, "description": "7 m walls and a roof; always flat." }
+    },
+    "step": {
+      "type": "object",
+      "minProperties": 1,
+      "oneOf": [
+        { "required": ["section"], "properties": { "section": { "type": "string", "description": "Groups the following pieces (a folder in the scene)." } }, "additionalProperties": false, "patternProperties": { "^\\$": {} } },
+        { "required": ["surface"], "properties": { "surface": { "type": "string", "description": "Game surface of the road from here: Asphalt, Dirt, Ice, Mud, Sand, Magma; \"\" = the host's." } }, "additionalProperties": false, "patternProperties": { "^\\$": {} } },
+        { "required": ["season"], "properties": { "season": { "type": "string", "description": "Seasonal maps: season tag of the road from here (switch it inside a tunnel)." } }, "additionalProperties": false, "patternProperties": { "^\\$": {} } },
+        {
+          "required": ["straight"],
+          "properties": {
+            "straight": { "type": "integer", "minimum": 1, "maximum": 200, "description": "Number of straight pieces." },
+            "width": { "$ref": "#/definitions/pieceOptions/width" }, "length": { "$ref": "#/definitions/pieceOptions/length" }, "bank": { "$ref": "#/definitions/pieceOptions/bank" }, "pipe": { "$ref": "#/definitions/pieceOptions/pipe" }, "pipeHeight": { "$ref": "#/definitions/pieceOptions/pipeHeight" }, "pillars": { "$ref": "#/definitions/pieceOptions/pillars" }, "push": { "$ref": "#/definitions/pieceOptions/push" }, "tunnel": { "$ref": "#/definitions/pieceOptions/tunnel" }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        {
+          "required": ["tiles"],
+          "properties": {
+            "tiles": { "type": "integer", "minimum": 1, "maximum": 200, "description": "Number of pieces the turn and slope are spread over." },
+            "turn": { "type": "number", "default": 0, "description": "Total degrees turned (+ = right)." },
+            "slope": { "type": "number", "default": 0, "description": "Total degrees the road tilts (+ = up, - = down). Climbing then levelling: +15 then -15." },
+            "width": { "$ref": "#/definitions/pieceOptions/width" }, "length": { "$ref": "#/definitions/pieceOptions/length" }, "bank": { "$ref": "#/definitions/pieceOptions/bank" }, "pipe": { "$ref": "#/definitions/pieceOptions/pipe" }, "pipeHeight": { "$ref": "#/definitions/pieceOptions/pipeHeight" }, "pillars": { "$ref": "#/definitions/pieceOptions/pillars" }, "push": { "$ref": "#/definitions/pieceOptions/push" }, "tunnel": { "$ref": "#/definitions/pieceOptions/tunnel" }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        { "required": ["boost"], "properties": { "boost": { "const": true, "description": "A +20 boost pad here (no piece added)." } }, "additionalProperties": false, "patternProperties": { "^\\$": {} } },
+        { "required": ["boostRun"], "properties": { "boostRun": { "type": "integer", "minimum": 1, "maximum": 20, "description": "N boost pads, each followed by a piece (before loops: 3)." } }, "additionalProperties": false, "patternProperties": { "^\\$": {} } },
+        {
+          "required": ["loop"],
+          "properties": {
+            "loop": {
+              "oneOf": [
+                { "const": true },
+                {
+                  "type": "object", "additionalProperties": false, "patternProperties": { "^\\$": {} },
+                  "properties": {
+                    "tiles": { "type": "integer", "minimum": 8, "maximum": 80, "default": 32 },
+                    "tileLength": { "type": "number", "default": 4 },
+                    "width": { "type": "number", "default": 8 }
+                  }
+                }
+              ],
+              "description": "A vertical loop with walls, accelerators and gravity. Put { \"boostRun\": 3 } and { \"straight\": 2, \"push\": true } before it."
+            }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        {
+          "required": ["barrelRoll"],
+          "properties": {
+            "barrelRoll": {
+              "oneOf": [
+                { "const": true },
+                {
+                  "type": "object", "additionalProperties": false, "patternProperties": { "^\\$": {} },
+                  "properties": {
+                    "length": { "type": "number", "default": 120 },
+                    "radius": { "type": "number", "default": 9 },
+                    "clockwise": { "type": "boolean", "default": true }
+                  }
+                }
+              ],
+              "description": "The road turns a full turn about the direction of travel."
+            }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        {
+          "required": ["jump"],
+          "properties": {
+            "jump": {
+              "type": "object", "required": ["gap", "drop"], "additionalProperties": false, "patternProperties": { "^\\$": {} },
+              "description": "Kicker, gap and landing. Put a boost before it.",
+              "properties": {
+                "gap": { "type": "number", "description": "Gap length in m (15-22)." },
+                "drop": { "type": "number", "description": "How much lower the landing is, in m (3-7)." },
+                "kicker": { "type": "number", "default": 12, "description": "Total degrees the kicker tilts up." },
+                "kickerTiles": { "type": "integer", "minimum": 1, "maximum": 6, "default": 2 },
+                "kickerLength": { "type": "number", "default": 6 },
+                "landing": { "type": "number", "default": 12, "description": "Degrees the landing tilts down (10-12)." },
+                "landingFlat": { "type": "integer", "minimum": 0, "maximum": 10, "default": 2 },
+                "landingWidth": { "type": "number", "default": 16 },
+                "landingLength": { "type": "number", "default": 12 }
+              }
+            }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        {
+          "required": ["gap"],
+          "properties": {
+            "gap": {
+              "type": "object", "required": ["forward"], "additionalProperties": false, "patternProperties": { "^\\$": {} },
+              "properties": { "forward": { "type": "number" }, "drop": { "type": "number", "default": 0 } },
+              "description": "A bare gap (jump already shaped by hand)."
+            }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        {
+          "required": ["reachHeight"],
+          "properties": {
+            "reachHeight": { "type": "number", "description": "Ramps up or down to this height (±1 m). Use 2 before the finish." },
+            "pillars": { "type": "boolean", "default": false }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        {
+          "required": ["fork"],
+          "properties": {
+            "fork": {
+              "type": "object", "required": ["left", "right"], "additionalProperties": false, "patternProperties": { "^\\$": {} },
+              "description": "A Y-fork. Build the lanes as mirror images (same pieces, turns negated) so they end side by side.",
+              "properties": {
+                "spread": { "type": "number", "default": 9, "description": "How far each lane moves off the centre line, in m." },
+                "left": { "$ref": "#/definitions/steps" },
+                "right": { "$ref": "#/definitions/steps" }
+              }
+            }
+          },
+          "additionalProperties": false, "patternProperties": { "^\\$": {} }
+        },
+        { "required": ["finish"], "properties": { "finish": { "const": true, "description": "The finish gate, 15 m before the end. Always the last step." } }, "additionalProperties": false, "patternProperties": { "^\\$": {} } }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "SlipSkid.MapKit.SDK",
+    "rootNamespace": "SlipSkid.MapKit.SDK",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,10 @@
+{
+  "name": "MyFirstMap",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "My First Map: a short track with a banked turn, a climb and a gap jump, mud S-bends and a loop. Made with the Slip & Skid Map Kit.",
+  "dependencies": [
+    "SlipSkid_Modding-BepInExPack_SlipSkid-6.0.697",
+    "LesAmisDeIronWings-MapKitLoader-1.3.0"
+  ]
+}

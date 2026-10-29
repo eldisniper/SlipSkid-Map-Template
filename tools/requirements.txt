@@ -1,0 +1,2 @@
+# tools/*.py (track_sim, plot_track, icons)
+Pillow

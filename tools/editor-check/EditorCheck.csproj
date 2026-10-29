@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Type-checks the Map Kit's SDK and editor scripts (generators, TrackBuilder...) without opening Unity: seconds,
+       no licence, nothing else running. References Unity 2022.3.62f3's managed DLLs and the project's compiled
+       packages (unity/MapKit/Library/ScriptAssemblies, made by any Unity build or import of the project).
+       Run: dotnet build tools/editor-check   (override the Unity folder with -p:UnityManaged=...). Its output is
+       thrown away: Unity compiles the real thing. -->
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <UnityManaged Condition="'$(UnityManaged)' == '' And Exists('C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\Managed')">C:\Program Files\Unity\Hub\Editor\2022.3.62f3\Editor\Data\Managed</UnityManaged>
+    <UnityManaged Condition="'$(UnityManaged)' == ''">C:\Program Files\Unity 2022.3.62f3\Editor\Data\Managed</UnityManaged>
+    <ScriptAssemblies>$(MSBuildThisFileDirectory)..\..\unity\MapKit\Library\ScriptAssemblies</ScriptAssemblies>
+    <NoWarn>CS0649;CS0414;CS0618</NoWarn>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\unity\MapKit\Assets\SlipSkid\SDK\*.cs" />
+    <Compile Include="..\..\unity\MapKit\Assets\SlipSkid\Editor\*.cs" />
+    <Reference Include="$(UnityManaged)\UnityEditor.dll" Private="false" />
+    <Reference Include="$(UnityManaged)\UnityEngine\*.dll" Private="false" />
+    <Reference Include="$(ScriptAssemblies)\Unity.RenderPipelines.Universal.Runtime.dll" Private="false" />
+    <Reference Include="$(ScriptAssemblies)\Unity.RenderPipelines.Core.Runtime.dll" Private="false" />
+  </ItemGroup>
+</Project>

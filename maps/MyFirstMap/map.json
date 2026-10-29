@@ -1,0 +1,45 @@
+{
+  "$schema": "../../docs/mapkit-map.schema.json",
+  "$comment": "A small starter track: a banked turn, a climb, a gap jump, S-bends on mud and a loop. Copy this folder, rename it and the id, then change the course. Build: python tools/build_map.py maps/MyFirstMap/map.json --no-install",
+
+  "map": { "id": "MyFirstMap", "name": "My First Map", "author": "you", "difficulty": 2, "host": "Snake" },
+  "podium": { "position": [0, 0, -80], "yaw": 180 },
+  "decor": { "theme": "NightCity" },
+
+  "course": [
+    { "section": "1 - Start" },
+    { "straight": 8 },
+
+    { "section": "2 - Banked right turn" },
+    { "tiles": 6, "turn": 90, "bank": 10 },
+    { "straight": 3 },
+
+    { "section": "3 - Climb and jump" },
+    { "tiles": 3, "slope": 12 },
+    { "straight": 3 },
+    { "tiles": 3, "slope": -12 },
+    { "boost": true },
+    { "straight": 2 },
+    { "jump": { "gap": 18, "drop": 4 } },
+    { "straight": 3 },
+
+    { "section": "4 - Mud S-bends" },
+    { "surface": "Mud" },
+    { "tiles": 4, "turn": -32, "pipe": "Outer" },
+    { "tiles": 4, "turn": 32, "pipe": "Outer" },
+    { "surface": "Asphalt" },
+    { "straight": 4 },
+
+    { "section": "5 - Loop" },
+    { "boostRun": 3 },
+    { "straight": 2, "push": true },
+    { "loop": { "tiles": 30, "tileLength": 4 } },
+    { "straight": 4 },
+
+    { "section": "6 - Last turn and finish" },
+    { "reachHeight": 2 },
+    { "tiles": 6, "turn": -90, "bank": 10 },
+    { "straight": 10 },
+    { "finish": true }
+  ]
+}

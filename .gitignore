@@ -1,0 +1,35 @@
+# Built packages
+dist/
+
+# Unity: caches, logs, per-user state, build output, generated IDE projects
+unity/*/[Ll]ibrary/
+unity/*/[Tt]emp/
+unity/*/[Oo]bj/
+unity/*/[Ll]ogs/
+unity/*/[Uu]ser[Ss]ettings/
+unity/*/[Bb]uilds/
+unity/*/*.csproj
+unity/*/*.sln
+unity/*/.vs/
+unity/*/.vsconfig
+
+# Map scenes are rebuilt from maps/<Map>/map.json. To keep a hand-edited map:  !unity/MapKit/Assets/Maps/<Map>/
+unity/MapKit/Assets/Maps/*
+!unity/MapKit/Assets/Maps/README.md
+
+# The game's own road pieces (KitStockPiece previews) come from your game install: never commit them.
+unity/MapKit/Assets/StockPieces/
+unity/MapKit/Assets/StockPieces.meta
+
+# Tools
+tools/editor-check/bin/
+tools/editor-check/obj/
+maps/*/map-layout.png
+__pycache__/
+*.pyc
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

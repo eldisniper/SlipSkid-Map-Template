@@ -1,0 +1,88 @@
+{
+  "$schema": "../../docs/mapkit-map.schema.json",
+
+  "$comment": "Big stunt track: banked turns, a half-pipe slalom, two loops, a high bridge with a jump into the void, a second gap jump, a Y-fork (half-pipe or boosts). Night city decor. Build: python tools/build_map.py maps/MegaStunt/map.json. Format: docs/JSON_MAPS.md",
+  "map": { "id": "MegaStunt", "name": "Mega Stunt", "difficulty": 5 },
+  "podium": { "position": [0, 0, -80], "yaw": 180 },
+  "decor": { "theme": "NightCity" },
+
+  "course": [
+    { "section": "1 - Start" },
+    { "straight": 8 },
+
+    { "section": "2 - Big right turn (banked)" },
+    { "tiles": 6, "turn": 90, "bank": 12 },
+    { "straight": 4 },
+
+    { "section": "3 - Half-pipe slalom" },
+    { "tiles": 3, "turn": -45, "pipe": "Both" },
+    { "tiles": 6, "turn": 90, "pipe": "Both" },
+    { "tiles": 3, "turn": -45, "pipe": "Both" },
+    { "straight": 3 },
+
+    { "section": "4 - Loop 1" },
+    { "boostRun": 3 },
+    { "straight": 2, "push": true },
+    { "loop": { "tiles": 30, "tileLength": 4 } },
+    { "straight": 5 },
+
+    { "section": "5 - Climb to the bridge" },
+    { "tiles": 3, "slope": 15 },
+    { "straight": 6 },
+    { "tiles": 3, "slope": -15 },
+
+    { "section": "6 - Bridge (no walls) + jump" },
+    { "straight": 10, "pillars": true },
+    { "boost": true },
+    { "straight": 1, "pillars": true },
+    { "jump": { "gap": 22, "drop": 7, "kicker": 12, "landing": 12, "landingFlat": 2 } },
+
+    { "section": "7 - Down to the valley" },
+    { "tiles": 3, "slope": -15 },
+    { "straight": 4 },
+    { "tiles": 3, "slope": 15 },
+    { "tiles": 6, "turn": -90, "bank": 8, "pipe": "Outer" },
+    { "straight": 3 },
+
+    { "section": "8 - Gap jump" },
+    { "boost": true },
+    { "straight": 2 },
+    { "jump": { "gap": 16, "drop": 3, "kicker": 10, "landing": 10, "landingFlat": 0 } },
+    { "straight": 3 },
+
+    { "section": "9 - S-bends (banked)" },
+    { "reachHeight": 2 },
+    { "tiles": 4, "turn": 60, "bank": 10 },
+    { "tiles": 8, "turn": -120, "bank": 10 },
+    { "tiles": 4, "turn": 60, "bank": 10 },
+    { "straight": 2 },
+
+    { "section": "10 - Fork: half-pipe or boosts" },
+    { "fork": {
+        "spread": 9,
+        "left": [
+          { "tiles": 2, "turn": -20, "pipe": "Both" },
+          { "tiles": 4, "turn": 40, "pipe": "Both" },
+          { "tiles": 2, "turn": -20, "pipe": "Both" }
+        ],
+        "right": [
+          { "tiles": 2, "turn": 20 },
+          { "boost": true },
+          { "tiles": 4, "turn": -40 },
+          { "tiles": 2, "turn": 20 }
+        ]
+    } },
+    { "straight": 3 },
+
+    { "section": "11 - Loop 2" },
+    { "boostRun": 3 },
+    { "straight": 2, "push": true },
+    { "loop": { "tiles": 34, "tileLength": 4 } },
+    { "straight": 4 },
+
+    { "section": "12 - Final turn and finish" },
+    { "tiles": 6, "turn": 90, "bank": 10, "pipe": "Outer" },
+    { "straight": 10 },
+    { "finish": true }
+  ]
+}
